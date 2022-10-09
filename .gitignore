@@ -3,5 +3,7 @@ Rabe/obj/
 Test/bin/
 Test/obj/
 /packages/
+publish/
+.idea/
 riderModule.iml
 /_ReSharper.Caches/
