@@ -1,5 +1,7 @@
 Rabe/bin/
 Rabe/obj/
+Test/bin/
+Test/obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
