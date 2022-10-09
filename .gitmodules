@@ -1,0 +1,3 @@
+[submodule "rabe-ffi"]
+	path = rabe-ffi
+	url = git-145:/home/git4/data-flow/rabe-ffi.git

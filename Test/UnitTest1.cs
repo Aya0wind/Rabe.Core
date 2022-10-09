@@ -2,7 +2,6 @@ using System;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Unicode;
 using Rabe;
 using NUnit.Framework;
 
@@ -23,7 +22,7 @@ public class Tests
     [Test]
     public void CPABETest()
     {
-        Rabe.CPABE.SecretKey secretKey = Rabe.CPABE.CPABEExtension.KeyGen(_masterKey,new string[]{"A", "B"});
+        Rabe.CPABE.SecretKey secretKey = Rabe.CPABE.Extension.KeyGen(_masterKey,new string[]{"A"});
         var secretKeyJson = JsonSerializer.Serialize(secretKey, new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -31,8 +30,8 @@ public class Tests
         });
         Console.WriteLine(secretKeyJson);
         var secretKeyDeserialized = JsonSerializer.Deserialize<Rabe.CPABE.SecretKey>(secretKeyJson);
-        var message = Encoding.Default.GetBytes("dsafsadsa");
-        var cipher = Rabe.CPABE.CPABEExtension.Encrypt(_publicKey,"\"A\" and \"B\"", message );
+        var message = Encoding.Default.GetBytes("Hello world!");
+        var cipher = Rabe.CPABE.Extension.Encrypt(_publicKey,"\"A\" or \"B\"", message );
         var cipherJson = JsonSerializer.Serialize(cipher, new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -47,7 +46,7 @@ public class Tests
     [Test]
     public void KPABETest()
     {
-        Rabe.KPABE.SecretKey secretKey = Rabe.KPABE.KPABEExtension.KeyGen(_masterKey,"\"A\" and \"B\"");
+        Rabe.KPABE.SecretKey secretKey = Rabe.KPABE.Extension.KeyGen(_masterKey,"\"A\" and \"B\"");
         var secretKeyJson = JsonSerializer.Serialize(secretKey, new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -55,8 +54,8 @@ public class Tests
         });
         Console.WriteLine(secretKeyJson);
         var secretKeyDeserialized = JsonSerializer.Deserialize<Rabe.KPABE.SecretKey>(secretKeyJson);
-        var message = Encoding.Default.GetBytes("dsafsadsa");
-        var cipher = Rabe.KPABE.KPABEExtension.Encrypt(_publicKey,new string[]{"A", "B"}, message );
+        var message = Encoding.Default.GetBytes("Hello world!");
+        var cipher = Rabe.KPABE.Extension.Encrypt(_publicKey,new string[]{"A", "B"}, message );
         var cipherJson = JsonSerializer.Serialize(cipher, new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
