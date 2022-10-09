@@ -26,7 +26,7 @@
     <!--  发布nuget包需要，自动打包对应平台的库文件到对应的平台目录下实现跨平台  -->
     <Target Name="IncludeAllDependencies" BeforeTargets="_GetPackageFiles">
         <ItemGroup>
-            <None Include="libs\runtimes\**\*.*" Pack="True" PackagePath="runtimes"/>
+            <None Include="libs\runtimes\**\*.*" Pack="True" PackagePath="runtimes" />
         </ItemGroup>
     </Target>
 
