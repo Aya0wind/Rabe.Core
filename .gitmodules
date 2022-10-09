@@ -1,3 +1,3 @@
-[submodule "rabe-ffi"]
-	path = rabe-ffi
-	url = git-145:/home/git4/data-flow/rabe-ffi.git
+[submodule "Rabe-ffi"]
+	path = Rabe-ffi
+	url = https://github.com/Aya0wind/Rabe-ffi.git
