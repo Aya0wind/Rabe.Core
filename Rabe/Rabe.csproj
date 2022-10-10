@@ -4,17 +4,17 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>Rabe.Core</PackageId>
-        <Version>1.0.3</Version>
+        <Version>1.0.4</Version>
         <Authors>ljj</Authors>
+        <PackageReleaseNotes>Fix Bug: make json quotes escaped and lead to unexpected serialization result</PackageReleaseNotes>
         <PackageTags>Attribute Based Encryption;Encryption;Crypto;ABE;CP-ABE;KP-ABE</PackageTags>
         <Description>
             This library is rust attribute based encryption library rabe's c# binding, support CP-ABE and KP-ABE encryption and decryption.
             And support cipher or key json serialization and deserialization.
         </Description>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <!--  在哪个平台上调试就填哪个   -->
-        <DebugTargetOS>osx-arm64</DebugTargetOS>
+        <DebugTargetOS>win-x64</DebugTargetOS>
     </PropertyGroup>
     <ItemGroup>
         <!--  调试需要，自动复制库文件到运行目录下      -->
@@ -27,7 +27,7 @@
     <!--  发布nuget包需要，自动打包对应平台的库文件到对应的平台目录下实现跨平台  -->
     <Target Name="IncludeAllDependencies" BeforeTargets="_GetPackageFiles">
         <ItemGroup>
-            <None Include="libs\runtimes\**\*.*" Pack="True" PackagePath="runtimes" />
+            <None Include="libs\runtimes\**\*.*" Pack="True" PackagePath="runtimes"/>
         </ItemGroup>
     </Target>
 

@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabe", "Rabe\Rabe.csproj", "{25314A1E-E932-4542-A3E7-99E4185F6EE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{AAD800FC-F573-4838-9B64-C11937116423}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{C6998ADC-D189-4BE9-91E8-08C2FBEDC0B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +14,9 @@ Global
 		{25314A1E-E932-4542-A3E7-99E4185F6EE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25314A1E-E932-4542-A3E7-99E4185F6EE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25314A1E-E932-4542-A3E7-99E4185F6EE4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AAD800FC-F573-4838-9B64-C11937116423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AAD800FC-F573-4838-9B64-C11937116423}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AAD800FC-F573-4838-9B64-C11937116423}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AAD800FC-F573-4838-9B64-C11937116423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6998ADC-D189-4BE9-91E8-08C2FBEDC0B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6998ADC-D189-4BE9-91E8-08C2FBEDC0B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6998ADC-D189-4BE9-91E8-08C2FBEDC0B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6998ADC-D189-4BE9-91E8-08C2FBEDC0B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
