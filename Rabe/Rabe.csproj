@@ -14,7 +14,8 @@
         </Description>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <!--  在哪个平台上调试就填哪个   -->
-        <DebugTargetOS>win-x64</DebugTargetOS>
+        <DebugTargetOS>osx-arm64</DebugTargetOS>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
         <!--  调试需要，自动复制库文件到运行目录下      -->
@@ -27,7 +28,7 @@
     <!--  发布nuget包需要，自动打包对应平台的库文件到对应的平台目录下实现跨平台  -->
     <Target Name="IncludeAllDependencies" BeforeTargets="_GetPackageFiles">
         <ItemGroup>
-            <None Include="libs\runtimes\**\*.*" Pack="True" PackagePath="runtimes"/>
+            <None Include="libs\runtimes\**\*.*" Pack="True" PackagePath="runtimes" />
         </ItemGroup>
     </Target>
 

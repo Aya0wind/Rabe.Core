@@ -1,10 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using Rabe.CPABE;
 
-namespace Rabe;
+namespace Rabe.CPABE.AW11;
 
 internal class PublicKeyJsonConverter : JsonConverter<PublicKey>
 {
@@ -13,7 +11,7 @@ internal class PublicKeyJsonConverter : JsonConverter<PublicKey>
         using (JsonDocument document = JsonDocument.ParseValue(ref reader))
         {
             var rawText = document.RootElement.GetRawText();
-            var handle = NativeLibCommon.DeserializePubKey(rawText);
+            var handle = RabeNative.cp_aw11_public_key_from_json(rawText);
             if (handle == IntPtr.Zero)
                 throw new Exception("Failed to deserialize publicKey");
             return new PublicKey(handle);
@@ -23,11 +21,17 @@ internal class PublicKeyJsonConverter : JsonConverter<PublicKey>
     public override void Write(Utf8JsonWriter writer, PublicKey value, JsonSerializerOptions options)
     {
         //convert a PublicKey to a json object
-        var json = NativeLibCommon.PubKeyToJson(value.Handle);
+        var json = RabeNative.cp_aw11_public_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
             throw new Exception("Failed to convert publicKey to json");
-        writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
-        NativeLibCommon.FreeJson(json);
+        try
+        {
+            writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
+        }
+        finally
+        {
+            RabeNative.free_json(json);
+        }
     }
 }
 
@@ -38,7 +42,7 @@ internal class MasterKeyJsonConverter : JsonConverter<MasterKey>
         using (JsonDocument document = JsonDocument.ParseValue(ref reader))
         {
             var rawText = document.RootElement.GetRawText();
-            var handle = NativeLibCommon.DeserializeMasterKey(rawText);
+            var handle = RabeNative.cp_aw11_master_key_from_json(rawText);
             if (handle == IntPtr.Zero)
                 throw new Exception("Failed to deserialize masterKey");
             return new MasterKey(handle);
@@ -48,22 +52,28 @@ internal class MasterKeyJsonConverter : JsonConverter<MasterKey>
     public override void Write(Utf8JsonWriter writer, MasterKey value, JsonSerializerOptions options)
     {
         //convert a MasterKey to a json object
-        var json = NativeLibCommon.MasterKeyToJson(value.Handle);
+        var json = RabeNative.cp_aw11_master_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
             throw new Exception("Failed to convert masterKey to json");
-        writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
-        NativeLibCommon.FreeJson(json);
+        try
+        {
+            writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
+        }
+        finally
+        {
+            RabeNative.free_json(json);
+        }
     }
 }
 
-internal class CpSecretKeyJsonConverter : JsonConverter<SecretKey>
+internal class SecretKeyJsonConverter : JsonConverter<SecretKey>
 {
     public override SecretKey Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using (JsonDocument document = JsonDocument.ParseValue(ref reader))
         {
             var rawText = document.RootElement.GetRawText();
-            var handle = NativeLibCp.DeserializeSecretKey(rawText);
+            var handle = RabeNative.cp_aw11_secret_key_from_json(rawText);
             if (handle == IntPtr.Zero)
                 throw new Exception("Failed to deserialize CpSecretKey");
             return new SecretKey(handle);
@@ -72,25 +82,29 @@ internal class CpSecretKeyJsonConverter : JsonConverter<SecretKey>
 
 
     public override void Write(Utf8JsonWriter writer, SecretKey value, JsonSerializerOptions options)
-    {
-        //convert a SecretKey to a json object
-        var json = NativeLibCp.SecKeyToJson(value.Handle);
+    {   //convert a SecretKey to a json object
+        var json = RabeNative.cp_aw11_secret_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
             throw new Exception("Failed to convert CpSecretKey to json");
-        var jsonString = Marshal.PtrToStringAnsi(json)!;
-        writer.WriteRawValue(jsonString);
-        NativeLibCommon.FreeJson(json);
+        try
+        {
+            writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
+        }
+        finally
+        {
+            RabeNative.free_json(json);
+        }
     }
 }
 
-internal class CpCipherJsonConverter : JsonConverter<Cipher>
+internal class CipherJsonConverter : JsonConverter<Cipher>
 {
     public override Cipher Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using (JsonDocument document = JsonDocument.ParseValue(ref reader))
         {
             var rawText = document.RootElement.GetRawText();
-            var handle = NativeLibCp.DeserializeCipher(rawText);
+            var handle = RabeNative.cp_aw11_ciphertext_from_json(rawText);
             if (handle == IntPtr.Zero)
                 throw new Exception("Failed to deserialize CpCipher");
             return new Cipher(handle);
@@ -100,61 +114,48 @@ internal class CpCipherJsonConverter : JsonConverter<Cipher>
     public override void Write(Utf8JsonWriter writer, Cipher value, JsonSerializerOptions options)
     {
         //convert a Cipher to a json object
-        var json = NativeLibCp.CipherToJson(value.Handle);
+        var json = RabeNative.cp_aw11_ciphertext_to_json(value.Handle);
         if (json == IntPtr.Zero)
             throw new Exception("Failed to convert Cipher to json");
-        writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
-        NativeLibCommon.FreeJson(json);
+        try
+        {
+            writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
+        }
+        finally
+        {
+            RabeNative.free_json(json);
+        }
     }
 }
 
-internal class KpSecretKeyJsonConverter : JsonConverter<KPABE.SecretKey>
+
+internal class GlobalKeyJsonConverter : JsonConverter<GlobalKey>
 {
-    public override KPABE.SecretKey Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override GlobalKey Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using (JsonDocument document = JsonDocument.ParseValue(ref reader))
         {
             var rawText = document.RootElement.GetRawText();
-            var handle = NativeLibKp.DeserializeSecretKey(rawText);
+            var handle = RabeNative.cp_aw11_global_key_from_json(rawText);
             if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize CpSecretKey");
-            return new KPABE.SecretKey(handle);
+                throw new Exception("Failed to deserialize CpCipher");
+            return new GlobalKey(handle);
         }
     }
 
-
-    public override void Write(Utf8JsonWriter writer, KPABE.SecretKey value, JsonSerializerOptions options)
-    {
-        //convert a SecretKey to a json object
-        var json = NativeLibKp.SecKeyToJson(value.Handle);
-        if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert SecretKey to json");
-        writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
-        NativeLibCommon.FreeJson(json);
-    }
-}
-
-internal class KpCipherJsonConverter : JsonConverter<KPABE.Cipher>
-{
-    public override KPABE.Cipher Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        using (JsonDocument document = JsonDocument.ParseValue(ref reader))
-        {
-            var rawText = document.RootElement.GetRawText();
-            var handle = NativeLibKp.DeserializeCipher(rawText);
-            if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize KpCipher");
-            return new KPABE.Cipher(handle);
-        }
-    }
-
-    public override void Write(Utf8JsonWriter writer, KPABE.Cipher value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, GlobalKey value, JsonSerializerOptions options)
     {
         //convert a Cipher to a json object
-        var json = NativeLibKp.CipherToJson(value.Handle);
+        var json = RabeNative.cp_aw11_global_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert KpCipher to json");
-        writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
-        NativeLibCommon.FreeJson(json);
+            throw new Exception("Failed to convert Cipher to json");
+        try
+        {
+            writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
+        }
+        finally
+        {
+            RabeNative.free_json(json);
+        }
     }
 }

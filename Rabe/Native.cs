@@ -1,191 +1,933 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Rabe;
 
-[StructLayout(LayoutKind.Sequential)]
-public struct InitKeyResult
+public struct CBoxedBuffer
 {
-    public IntPtr pubKey;
-    public IntPtr masterKey;
-}
-
-[StructLayout(LayoutKind.Sequential)]
-public struct DecryptResult
-{
+    [NativeTypeName("const unsigned char *")]
     public IntPtr buffer;
-    public UIntPtr len;
+
+    [NativeTypeName("uintptr_t")] public nuint len;
 }
 
-internal static class NativeLibCommon
+public struct Ac17SetupResult
 {
-    public const string LibraryName = "rabe_ffi";
+    [NativeTypeName("const void *")] public IntPtr master_key;
 
-    // Common functions for cp-abe and kp-abe
-    [DllImport(LibraryName, EntryPoint = "rabe_init")]
-    public static extern InitKeyResult Init();
-
-    [DllImport(LibraryName, EntryPoint = "rabe_master_key_to_json")]
-    public static extern IntPtr MasterKeyToJson(
-        IntPtr masterKey
-    );
-
-    [DllImport(LibraryName, EntryPoint = "rabe_pub_key_to_json")]
-    public static extern IntPtr PubKeyToJson(
-        IntPtr pubKey
-    );
-
-    [DllImport(LibraryName, EntryPoint = "rabe_free_json")]
-    public static extern void FreeJson(
-        IntPtr json
-    );
-
-    [DllImport(LibraryName, EntryPoint = "rabe_free_decrypt_result")]
-    public static extern void FreeDecryptResult(
-        DecryptResult result
-    );
-
-    [DllImport(LibraryName, EntryPoint = "rabe_free_init_result")]
-    public static extern void FreeInitResult(
-        InitKeyResult result
-    );
-
-    [DllImport(LibraryName, EntryPoint = "rabe_free_pub_key")]
-    public static extern void FreePubKey(
-        IntPtr pubKey
-    );
-
-    [DllImport(LibraryName, EntryPoint = "rabe_free_master_key")]
-    public static extern void FreeMasterKey(
-        IntPtr masterKey
-    );
-
-    [DllImport(LibraryName, EntryPoint = "rabe_deserialize_pub_key")]
-    public static extern IntPtr DeserializePubKey(
-        string json
-    );
-
-    [DllImport(LibraryName, EntryPoint = "rabe_deserialize_master_key")]
-    public static extern IntPtr DeserializeMasterKey(
-        string json
-    );
+    [NativeTypeName("const void *")] public IntPtr public_key;
 }
 
-internal static class NativeLibCp
+public struct Aw11AuthGenResult
 {
-    private const string LibraryName = NativeLibCommon.LibraryName;
+    [NativeTypeName("const void *")] public IntPtr master_key;
 
-    [DllImport(LibraryName, EntryPoint = "rabe_generate_cp_sec_key")]
-    public static extern IntPtr GenerateSecKey(
-        IntPtr masterKey,
-        string[] attrs,
-        UIntPtr attrLen
-    );
-
-    [DllImport(LibraryName, EntryPoint = "rabe_cp_encrypt")]
-    public static extern IntPtr Encrypt(
-        IntPtr pubKey,
-        string policy,
-        byte[] text,
-        UIntPtr textLength
-    );
-
-    [DllImport(LibraryName, EntryPoint = "rabe_cp_decrypt")]
-    public static extern DecryptResult Decrypt(
-        IntPtr cipher,
-        IntPtr secKey
-    );
-
-
-    [DllImport(LibraryName, EntryPoint = "rabe_cp_sec_key_to_json")]
-    public static extern IntPtr SecKeyToJson(
-        IntPtr secKey
-    );
-
-
-    [DllImport(LibraryName, EntryPoint = "rabe_cp_cipher_to_json")]
-    public static extern IntPtr CipherToJson(
-        IntPtr cipher
-    );
-
-
-    [DllImport(LibraryName, EntryPoint = "rabe_free_cp_cipher")]
-    public static extern void FreeCipher(
-        IntPtr cipher
-    );
-
-    [DllImport(LibraryName, EntryPoint = "rabe_free_cp_sec_key")]
-    public static extern void FreeSecKey(
-        IntPtr secKey
-    );
-
-
-    [DllImport(LibraryName, EntryPoint = "rabe_deserialize_cp_sec_key")]
-    public static extern IntPtr DeserializeSecretKey(
-        string json
-    );
-
-    [DllImport(LibraryName, EntryPoint = "rabe_deserialize_cp_cipher")]
-    public static extern IntPtr DeserializeCipher(
-        string json
-    );
+    [NativeTypeName("const void *")] public IntPtr public_key;
 }
 
-internal static class NativeLibKp
+public struct BdabeSetupResult
 {
-    private const string LibraryName = NativeLibCommon.LibraryName;
+    [NativeTypeName("const void *")] public IntPtr master_key;
 
-    [DllImport(LibraryName, EntryPoint = "rabe_generate_kp_sec_key")]
-    public static extern IntPtr GenerateSecKey(
-        IntPtr masterKey,
-        string policy
-    );
+    [NativeTypeName("const void *")] public IntPtr public_key;
+}
 
-    [DllImport(LibraryName, EntryPoint = "rabe_kp_encrypt")]
-    public static extern IntPtr Encrypt(
-        IntPtr pubKey,
-        string[] attrs,
-        UIntPtr attrLen,
-        byte[] text,
-        UIntPtr textLength
-    );
+public struct BswSetupResult
+{
+    [NativeTypeName("const void *")] public IntPtr master_key;
 
-    [DllImport(LibraryName, EntryPoint = "rabe_kp_decrypt")]
-    public static extern DecryptResult Decrypt(
-        IntPtr cipher,
-        IntPtr secKey
-    );
+    [NativeTypeName("const void *")] public IntPtr public_key;
+}
 
+public struct Mke08SetupResult
+{
+    [NativeTypeName("const void *")] public IntPtr master_key;
 
-    [DllImport(LibraryName, EntryPoint = "rabe_kp_sec_key_to_json")]
-    public static extern IntPtr SecKeyToJson(
-        IntPtr secKey
-    );
+    [NativeTypeName("const void *")] public IntPtr public_key;
+}
 
+public struct Yct14AbeSetupResult
+{
+    [NativeTypeName("const void *")] public IntPtr master_key;
 
-    [DllImport(LibraryName, EntryPoint = "rabe_kp_cipher_to_json")]
-    public static extern IntPtr CipherToJson(
-        IntPtr cipher
-    );
+    [NativeTypeName("const void *")] public IntPtr public_key;
+}
 
+public struct LswSetupResult
+{
+    [NativeTypeName("const void *")] public IntPtr master_key;
 
-    [DllImport(LibraryName, EntryPoint = "rabe_free_kp_cipher")]
-    public static extern void FreeCipher(
-        IntPtr cipher
-    );
+    [NativeTypeName("const void *")] public IntPtr public_key;
+}
 
-    [DllImport(LibraryName, EntryPoint = "rabe_free_kp_sec_key")]
-    public static extern void FreeSecKey(
-        IntPtr secKey
-    );
+/// <summary>Defines the type of a member as it was used in the native signature.</summary>
+[AttributeUsage(AttributeTargets.Struct | AttributeTargets.Enum | AttributeTargets.Property | AttributeTargets.Field |
+                AttributeTargets.Parameter | AttributeTargets.ReturnValue)]
+[Conditional("DEBUG")]
+internal sealed class NativeTypeNameAttribute : Attribute
+{
+    /// <summary>Initializes a new instance of the <see cref="NativeTypeNameAttribute" /> class.</summary>
+    /// <param name="name">The name of the type that was used in the native signature.</param>
+    public NativeTypeNameAttribute(string name)
+    {
+        Name = name;
+    }
 
+    /// <summary>Gets the name of the type that was used in the native signature.</summary>
+    public string Name { get; }
+}
 
-    [DllImport(LibraryName, EntryPoint = "rabe_deserialize_kp_sec_key")]
-    public static extern IntPtr DeserializeSecretKey(
-        string json
-    );
+public static class RabeNative
+{
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_free_json",
+        ExactSpelling = true)]
+    public static extern void free_json([NativeTypeName("char *")] IntPtr json);
 
-    [DllImport(LibraryName, EntryPoint = "rabe_deserialize_kp_cipher")]
-    public static extern IntPtr DeserializeCipher(
-        string json
-    );
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_free_boxed_buffer",
+        ExactSpelling = true)]
+    public static extern void free_boxed_buffer([NativeTypeName("struct CBoxedBuffer")] CBoxedBuffer result);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_ac17_init",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct Ac17SetupResult")]
+    public static extern Ac17SetupResult ac17_init();
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_ac17_generate_secret_key",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_ac17_generate_secret_key([NativeTypeName("const void *")] IntPtr master_key,
+        [NativeTypeName("const char *const *")]
+        string[] attr, [NativeTypeName("uintptr_t")] nuint attr_len);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_ac17_encrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_ac17_encrypt([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const char *")] string policy, [NativeTypeName("const char *")] byte[] text,
+        [NativeTypeName("uintptr_t")] nuint text_length);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_ac17_decrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct CBoxedBuffer")]
+    public static extern CBoxedBuffer cp_ac17_decrypt([NativeTypeName("const void *")] IntPtr cipher,
+        [NativeTypeName("const void *")] IntPtr secret_key);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_ac17_master_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr ac17_master_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_ac17_public_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr ac17_public_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_ac17_secret_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_ac17_secret_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_ac17_cipher_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_ac17_cipher_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_ac17_master_key_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr ac17_master_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_ac17_public_key_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr ac17_public_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_ac17_secret_key_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_ac17_secret_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_ac17_cipher_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_ac17_cipher_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_ac17_free_master_key",
+        ExactSpelling = true)]
+    public static extern void ac17_free_master_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_ac17_free_public_key",
+        ExactSpelling = true)]
+    public static extern void ac17_free_public_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_ac17_free_secret_key",
+        ExactSpelling = true)]
+    public static extern void cp_ac17_free_secret_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_ac17_free_cipher",
+        ExactSpelling = true)]
+    public static extern void cp_ac17_free_cipher([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_aw11_init",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr aw11_init();
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_generate_auth",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct Aw11AuthGenResult")]
+    public static extern Aw11AuthGenResult cp_aw11_generate_auth([NativeTypeName("const void *")] IntPtr global_key,
+        [NativeTypeName("const char *const *")]
+        string[] attrs, [NativeTypeName("uintptr_t")] nuint attr_len);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_generate_secret_key",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_aw11_generate_secret_key(
+        [NativeTypeName("const void *")] IntPtr global_key,
+        [NativeTypeName("const void *")] IntPtr master_key, 
+        [NativeTypeName("const char *")] string name,
+        [NativeTypeName("const char *const *")] string[] attrs, 
+        [NativeTypeName("uintptr_t")] nuint attr_len);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_encrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_aw11_encrypt([NativeTypeName("const void *")] IntPtr global_key,
+        [NativeTypeName("const void *const *")] IntPtr[] public_keys, 
+        [NativeTypeName("uintptr_t")] nuint public_keys_len,
+        [NativeTypeName("const char *")] string policy, [NativeTypeName("const char *")] byte[] text,
+        [NativeTypeName("uintptr_t")] nuint text_length);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_decrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct CBoxedBuffer")]
+    public static extern CBoxedBuffer cp_aw11_decrypt([NativeTypeName("const void *")] IntPtr global_key,
+        [NativeTypeName("const void *")] IntPtr secret_key, [NativeTypeName("const void *")] IntPtr cipher);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_aw11_master_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_aw11_master_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_aw11_public_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_aw11_public_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_aw11_secret_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_aw11_secret_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_aw11_ciphertext_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_aw11_ciphertext_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_aw11_global_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_aw11_global_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_master_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_aw11_master_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_public_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_aw11_public_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_secret_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_aw11_secret_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_ciphertext_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_aw11_ciphertext_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_global_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_aw11_global_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_free_master_key",
+        ExactSpelling = true)]
+    public static extern void cp_aw11_free_master_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_free_public_key",
+        ExactSpelling = true)]
+    public static extern void cp_aw11_free_public_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_free_secret_key",
+        ExactSpelling = true)]
+    public static extern void cp_aw11_free_secret_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_free_ciphertext",
+        ExactSpelling = true)]
+    public static extern void cp_aw11_free_ciphertext([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_free_global_key",
+        ExactSpelling = true)]
+    public static extern void cp_aw11_free_global_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_init",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct BdabeSetupResult")]
+    public static extern BdabeSetupResult cp_bdabe_init();
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_generate_sec_auth_key", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_generate_sec_auth_key([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const void *")] IntPtr master_key, [NativeTypeName("const char *")] string name);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_generate_sec_attr_key", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_generate_sec_attr_key([NativeTypeName("const void *")] IntPtr pub_user_key,
+        [NativeTypeName("const void *")] IntPtr sec_auth_key, [NativeTypeName("const char *")] string attr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_generate_user_key",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_generate_user_key([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const void *")] IntPtr sec_auth_key, [NativeTypeName("const char *")] string name);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_generate_pub_attr_key", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_generate_pub_attr_key([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const void *")] IntPtr sec_auth_key, [NativeTypeName("const char *")] string name);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_add_attr_to_user_key", ExactSpelling = true)]
+    public static extern int cp_bdabe_add_attr_to_user_key(
+        [NativeTypeName("const void *")] IntPtr sec_auth_key,
+        [NativeTypeName("const void *")] IntPtr user_key, 
+        [NativeTypeName("const char *")] string attr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_encrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_encrypt([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const void *const *")]
+        IntPtr[] pub_attr_keys,
+        [NativeTypeName("uintptr_t")] nuint pub_attr_keys_len, [NativeTypeName("const char *")] string policy,
+        [NativeTypeName("const char *")] byte[] text, [NativeTypeName("uintptr_t")] nuint text_length);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_decrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct CBoxedBuffer")]
+    public static extern CBoxedBuffer cp_bdabe_decrypt([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const void *")] IntPtr user_key, [NativeTypeName("const void *")] IntPtr cipher);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_public_user_key_to_json", ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bdabe_public_user_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_secret_user_key_to_json", ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bdabe_secret_user_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_master_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bdabe_master_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_public_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bdabe_public_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_secret_authority_key_to_json", ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bdabe_secret_authority_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_secret_attribute_key_to_json", ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bdabe_secret_attribute_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_public_attribute_key_to_json", ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bdabe_public_attribute_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_user_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bdabe_user_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_ciphertext_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bdabe_ciphertext_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_public_user_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_public_user_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_secret_user_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_secret_user_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_master_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_master_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_public_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_public_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_secret_authority_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_secret_authority_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_secret_attribute_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_secret_attribute_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_public_attribute_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_public_attribute_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_user_key_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_user_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_ciphertext_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bdabe_ciphertext_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_free_public_user_key", ExactSpelling = true)]
+    public static extern void cp_bdabe_free_public_user_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_free_secret_user_key", ExactSpelling = true)]
+    public static extern void cp_bdabe_free_secret_user_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_free_master_key",
+        ExactSpelling = true)]
+    public static extern void cp_bdabe_free_master_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_free_public_key",
+        ExactSpelling = true)]
+    public static extern void cp_bdabe_free_public_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_free_secret_authority_key", ExactSpelling = true)]
+    public static extern void cp_bdabe_free_secret_authority_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_free_secret_attribute_key", ExactSpelling = true)]
+    public static extern void cp_bdabe_free_secret_attribute_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_bdabe_free_public_attribute_key", ExactSpelling = true)]
+    public static extern void cp_bdabe_free_public_attribute_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_free_user_key",
+        ExactSpelling = true)]
+    public static extern void cp_bdabe_free_user_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_free_ciphertext",
+        ExactSpelling = true)]
+    public static extern void cp_bdabe_free_ciphertext([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_bsw_init",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct BswSetupResult")]
+    public static extern BswSetupResult bsw_init();
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_generate_secret_key",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bsw_generate_secret_key([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const void *")] IntPtr master_key, [NativeTypeName("const char *const *")] string[] attr,
+        [NativeTypeName("uintptr_t")] nuint attr_len);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_encrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bsw_encrypt([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const char *")] string policy, [NativeTypeName("const char *")] byte[] text,
+        [NativeTypeName("uintptr_t")] nuint text_length);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_decrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct CBoxedBuffer")]
+    public static extern CBoxedBuffer cp_bsw_decrypt([NativeTypeName("const void *")] IntPtr cipher,
+        [NativeTypeName("const void *")] IntPtr secret_key);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_secret_key_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bsw_secret_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_public_key_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bsw_public_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_ciphertext_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bsw_ciphertext_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_master_key_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_bsw_master_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_secret_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bsw_secret_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_public_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bsw_public_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_ciphertext_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bsw_ciphertext_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_master_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_bsw_master_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_free_secret_key",
+        ExactSpelling = true)]
+    public static extern void cp_bsw_free_secret_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_free_public_key",
+        ExactSpelling = true)]
+    public static extern void cp_bsw_free_public_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_free_ciphertext",
+        ExactSpelling = true)]
+    public static extern void cp_bsw_free_ciphertext([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bsw_free_master_key",
+        ExactSpelling = true)]
+    public static extern void cp_bsw_free_master_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_init",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct Mke08SetupResult")]
+    public static extern Mke08SetupResult cp_mke08_init();
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_generate_auth",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_generate_auth([NativeTypeName("const char *")] string name);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_generate_secret_key",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_generate_secret_key([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const void *")] IntPtr master_key, [NativeTypeName("const char *")] string name);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_encrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_encrypt([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const void *const *")]
+        IntPtr[] pub_attr_keys,
+        [NativeTypeName("uintptr_t")] nuint pub_attr_keys_len, [NativeTypeName("const char *")] string policy,
+        [NativeTypeName("const char *")] byte[] text, [NativeTypeName("uintptr_t")] nuint text_length);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_decrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct CBoxedBuffer")]
+    public static extern CBoxedBuffer cp_mke08_decrypt([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const void *")] IntPtr user_key, [NativeTypeName("const void *")] IntPtr cipher);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_master_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_mke08_master_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_public_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_mke08_public_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_public_attribute_key_to_json", ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_mke08_public_attribute_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_public_user_key_to_json", ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_mke08_public_user_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_secret_attribute_key_to_json", ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_mke08_secret_attribute_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_secret_authority_key_to_json", ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_mke08_secret_authority_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_secret_user_key_to_json", ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_mke08_secret_user_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_user_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_mke08_user_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_ciphertext_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr cp_mke08_ciphertext_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_master_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_master_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_public_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_public_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_public_attribute_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_public_attribute_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_public_user_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_public_user_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_secret_attribute_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_secret_attribute_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_secret_authority_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_secret_authority_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_secret_user_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_secret_user_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_user_key_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_user_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_ciphertext_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_ciphertext_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_free_master_key",
+        ExactSpelling = true)]
+    public static extern void cp_mke08_free_master_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_free_public_key",
+        ExactSpelling = true)]
+    public static extern void cp_mke08_free_public_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_free_public_attribute_key", ExactSpelling = true)]
+    public static extern void cp_mke08_free_public_attribute_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_free_public_user_key", ExactSpelling = true)]
+    public static extern void cp_mke08_free_public_user_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_free_secret_attribute_key", ExactSpelling = true)]
+    public static extern void cp_mke08_free_secret_attribute_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_free_secret_authority_key", ExactSpelling = true)]
+    public static extern void cp_mke08_free_secret_authority_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_free_secret_user_key", ExactSpelling = true)]
+    public static extern void cp_mke08_free_secret_user_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_free_user_key",
+        ExactSpelling = true)]
+    public static extern void cp_mke08_free_user_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_free_ciphertext",
+        ExactSpelling = true)]
+    public static extern void cp_mke08_free_ciphertext([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_ac17_generate_secret_key",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_ac17_generate_secret_key([NativeTypeName("const void *")] IntPtr master_key,
+        [NativeTypeName("const char *")] string policy);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_ac17_encrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_ac17_encrypt([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const char *const *")]
+        string[] attr, 
+        [NativeTypeName("uintptr_t")] nuint attr_len,
+        [NativeTypeName("const char *")] byte[] text, 
+        [NativeTypeName("uintptr_t")] nuint text_length);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_ac17_decrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct CBoxedBuffer")]
+    public static extern CBoxedBuffer kp_ac17_decrypt([NativeTypeName("const void *")] IntPtr cipher,
+        [NativeTypeName("const void *")] IntPtr secret_key);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_ac17_master_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr kp_ac17_master_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_ac17_public_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr kp_ac17_public_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_ac17_secret_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr kp_ac17_secret_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_ac17_ciphertext_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr kp_ac17_ciphertext_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_kp_ac17_master_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_ac17_master_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_kp_ac17_public_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_ac17_public_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_kp_ac17_secret_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_ac17_secret_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_kp_ac17_ciphertext_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_ac17_ciphertext_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_ac17_free_master_key",
+        ExactSpelling = true)]
+    public static extern void kp_ac17_free_master_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_ac17_free_public_key",
+        ExactSpelling = true)]
+    public static extern void kp_ac17_free_public_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_ac17_free_secret_key",
+        ExactSpelling = true)]
+    public static extern void kp_ac17_free_secret_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_ac17_free_ciphertext",
+        ExactSpelling = true)]
+    public static extern void kp_ac17_free_ciphertext([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_init",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct Yct14AbeSetupResult")]
+    public static extern Yct14AbeSetupResult kp_yct14_init([NativeTypeName("const char *const *")] string[] attrs,
+        [NativeTypeName("uintptr_t")] nuint attr_len);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_generate_secret_key",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_yct14_generate_secret_key([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const void *")] IntPtr master_key, [NativeTypeName("const char *")] string policy);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_encrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_yct14_encrypt([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const char *const *")]
+        string[] attrs, [NativeTypeName("uintptr_t")] nuint attr_len,
+        [NativeTypeName("const char *")] byte[] text, [NativeTypeName("uintptr_t")] nuint text_length);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_decrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct CBoxedBuffer")]
+    public static extern CBoxedBuffer kp_yct14_decrypt([NativeTypeName("const void *")] IntPtr cipher,
+        [NativeTypeName("const void *")] IntPtr secret_key);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_ciphertext_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr kp_yct14_ciphertext_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_master_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr kp_yct14_master_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_public_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr kp_yct14_public_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_secret_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr kp_yct14_secret_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_kp_yct14_ciphertext_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_yct14_ciphertext_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_kp_yct14_master_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_yct14_master_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_kp_yct14_public_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_yct14_public_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_kp_yct14_secret_key_from_json", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_yct14_secret_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_free_ciphertext",
+        ExactSpelling = true)]
+    public static extern void kp_yct14_free_ciphertext([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_free_master_key",
+        ExactSpelling = true)]
+    public static extern void kp_yct14_free_master_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_free_public_key",
+        ExactSpelling = true)]
+    public static extern void kp_yct14_free_public_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_free_secret_key",
+        ExactSpelling = true)]
+    public static extern void kp_yct14_free_secret_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_init",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct LswSetupResult")]
+    public static extern LswSetupResult kp_lsw_init();
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_generate_secret_key",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_lsw_generate_secret_key([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const void *")] IntPtr master_key, [NativeTypeName("const char *")] string policy);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_encrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_lsw_encrypt([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const char *const *")]
+        string[] attrs, [NativeTypeName("uintptr_t")] nuint attr_len,
+        [NativeTypeName("const char *")] byte[] text, [NativeTypeName("uintptr_t")] nuint text_length);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_decrypt",
+        ExactSpelling = true)]
+    [return: NativeTypeName("struct CBoxedBuffer")]
+    public static extern CBoxedBuffer kp_lsw_decrypt([NativeTypeName("const void *")] IntPtr cipher,
+        [NativeTypeName("const void *")] IntPtr secret_key);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_master_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr kp_lsw_master_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_public_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr kp_lsw_public_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_secret_key_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr kp_lsw_secret_key_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_ciphertext_to_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("char *")]
+    public static extern IntPtr kp_lsw_ciphertext_to_json([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_master_key_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_lsw_master_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_public_key_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_lsw_public_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_secret_key_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_lsw_secret_key_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_ciphertext_from_json",
+        ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr kp_lsw_ciphertext_from_json([NativeTypeName("const char *")] string json);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_free_master_key",
+        ExactSpelling = true)]
+    public static extern void kp_lsw_free_master_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_free_public_key",
+        ExactSpelling = true)]
+    public static extern void kp_lsw_free_public_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_free_secret_key",
+        ExactSpelling = true)]
+    public static extern void kp_lsw_free_secret_key([NativeTypeName("const void *")] IntPtr ptr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_free_ciphertext",
+        ExactSpelling = true)]
+    public static extern void kp_lsw_free_ciphertext([NativeTypeName("const void *")] IntPtr ptr);
 }
