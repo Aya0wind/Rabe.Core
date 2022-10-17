@@ -54,7 +54,7 @@ If you want to support other platforms and need to build from source:
    + ```git clone https://github.com/Aya0wind/Rabe.Core.git --recursive```
 
 2. Build rust native library 
-   + ```cd Rabe.Core/rust```
+   + ```cd Rabe.Core/Rabe-ffi```
    + ```cargo build --release```
 3. Copy native runtime library to Rabe.Core
    + ```cp target/release/librabe_core.so ../Rabe.Core/Rabe/libs/runtimes/linux-x64/native/rabe_core.so``` (**linux**)
