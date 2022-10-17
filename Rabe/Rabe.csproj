@@ -13,6 +13,7 @@
             Support cipher or key json serialization and deserialization.
         </Description>
         <PackageProjectUrl>https://github.com/Aya0wind/Rabe.Core</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Aya0wind/Rabe.Core</RepositoryUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <!--  在哪个平台上调试就填哪个   -->
         <DebugTargetOS>osx-arm64</DebugTargetOS>
