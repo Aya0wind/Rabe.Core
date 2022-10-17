@@ -12,6 +12,7 @@
             This library is rust attribute based encryption library rabe's c# binding, support mutiple CP-ABE and KP-ABE algorithm.
             Support cipher or key json serialization and deserialization.
         </Description>
+        <PackageProjectUrl>https://github.com/Aya0wind/Rabe.Core</PackageProjectUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <!--  在哪个平台上调试就填哪个   -->
         <DebugTargetOS>osx-arm64</DebugTargetOS>
