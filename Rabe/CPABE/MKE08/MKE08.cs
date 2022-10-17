@@ -110,7 +110,7 @@ public class SecretUserKey : NativeObject
     }
 }
 
-[JsonConverter(typeof(SecretUserKeyJsonConverter))]
+[JsonConverter(typeof(SecretAuthorityKeyJsonConverter))]
 public class SecretAuthorityKey : NativeObject
 {
     public SecretAuthorityKey(IntPtr handle):base(handle)
@@ -157,19 +157,50 @@ public static class Extension
     
     public static byte[] Decrypt(this UserKey userKey,PublicKey publicKey, Cipher cipher)
     {
-        var result = RabeNative.cp_bdabe_decrypt(publicKey.Handle, userKey.Handle, cipher.Handle);
+        var result = RabeNative.cp_mke08_decrypt(publicKey.Handle, userKey.Handle, cipher.Handle);
         return result.ToByteArrayAndFree();
     }
     
-    // public static SecretKey KeyGen(this MasterKey masterKey, string[] attributes)
-    // {
-    //     var secretKey = RabeNative.cp_ac17_generate_sec_key(
-    //         masterKey.Handle, 
-    //         attributes, 
-    //         (UIntPtr)attributes.Length
-    //         );
-    //     if (secretKey == IntPtr.Zero)
-    //         throw new Exception("KeyGen failed");
-    //     return new SecretKey(secretKey);
-    // }
+    public static UserKey UserKeyGen(this PublicKey publicKey,MasterKey masterKey, string name)
+    {
+        var userKey = RabeNative.cp_mke08_generate_user_key(
+            publicKey.Handle, 
+            masterKey.Handle, 
+            name
+            );
+        if (userKey == IntPtr.Zero)
+            throw new Exception("UserKeyGen failed");
+        return new UserKey(userKey);
+    }
+    
+    public static SecretAuthorityKey SecretAuthorityKeyGen(string name)
+    {
+        var secretAuthorityKey = RabeNative.cp_mke08_generate_secret_authority_key(name);
+        if (secretAuthorityKey == IntPtr.Zero)
+            throw new Exception("SecretAuthorityKeyGen failed");
+        return new SecretAuthorityKey(secretAuthorityKey);
+    }
+    
+    public static PublicAttributeKey PublicAttributeKeyGen(this PublicKey publicKey,SecretAuthorityKey secretAuthorityKey,string attribute)
+    {
+        var publicAttributeKey = RabeNative.cp_mke08_generate_public_attribute_key(
+            publicKey.Handle, 
+            attribute, 
+            secretAuthorityKey.Handle
+            );
+        if (publicAttributeKey == IntPtr.Zero)
+            throw new Exception("PublicAttributeKeyGen failed");
+        return new PublicAttributeKey(publicAttributeKey);
+    }
+    
+    public static void AddAttributeToUserKey(this UserKey userKey,SecretAuthorityKey secretAuthorityKey, string attribute)
+    {
+        var result = RabeNative.cp_mke08_add_attribute_to_user_key(
+            secretAuthorityKey.Handle, 
+            userKey.Handle, 
+            attribute
+            );
+        if (result != 0)
+            throw new Exception("AddAttribute failed");
+    }
 }

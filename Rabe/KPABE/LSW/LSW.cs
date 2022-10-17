@@ -40,13 +40,6 @@ public class MasterKey : NativeObject
     {
     }
     
-
-    public byte[] Decrypt(Cipher cipher)
-    {
-        var result = RabeNative.kp_lsw_decrypt(cipher.Handle, Handle);
-        return result.ToByteArrayAndFree();
-    }
-
     protected override void FreeHandle(IntPtr handle)
     {
         RabeNative.kp_lsw_free_master_key(handle);
@@ -61,13 +54,6 @@ public class SecretKey : NativeObject
     {
     }
     
-
-    public byte[] Decrypt(Cipher cipher)
-    {
-        var result = RabeNative.kp_lsw_decrypt(cipher.Handle, Handle);
-        return result.ToByteArrayAndFree();
-    }
-
     protected override void FreeHandle(IntPtr handle)
     {
         RabeNative.kp_lsw_free_secret_key(handle);
@@ -93,17 +79,23 @@ public static class Extension
 {
     public static Cipher Encrypt(this PublicKey publicKey, string[] attrs, byte[] text)
     {
-        var cipher = RabeNative.kp_ac17_encrypt(publicKey.Handle, attrs, (nuint)attrs.Length,text, (nuint)text.Length);
+        var cipher = RabeNative.kp_lsw_encrypt(publicKey.Handle, attrs, (nuint)attrs.Length,text, (nuint)text.Length);
         if (cipher == IntPtr.Zero)
             throw new Exception("Encryption failed");
         return new Cipher(cipher);
     }
 
-    public static SecretKey KeyGen(this MasterKey masterKey, string policy)
+    public static SecretKey KeyGen(this PublicKey publicKey,MasterKey masterKey, string policy)
     {
-        var secretKey = RabeNative.kp_ac17_generate_secret_key(masterKey.Handle,policy);
+        var secretKey = RabeNative.kp_lsw_generate_secret_key(publicKey.Handle,masterKey.Handle,policy);
         if (secretKey == IntPtr.Zero)
             throw new Exception("KeyGen failed");
         return new SecretKey(secretKey);
+    }
+    //decrypt
+    public static byte[] Decrypt(this SecretKey secretKey, Cipher cipher)
+    {
+        var result = RabeNative.kp_lsw_decrypt(cipher.Handle, secretKey.Handle);
+        return result.ToByteArrayAndFree();
     }
 }

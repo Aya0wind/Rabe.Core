@@ -27,24 +27,14 @@ public class AC17Test
     [Test]
     public void KPABETest()
     {
-        Console.WriteLine("KPABE test start");
         SecretKey secretKey = Extension.KeyGen(_masterKey,"\"A\" and \"B\"");
-        Console.WriteLine("Secret Key serialize test start");
         var secretKeyJson = JsonSerializer.Serialize(secretKey);
-        Console.WriteLine(secretKeyJson);
-        var secretKeyDeserialized = JsonSerializer.Deserialize<SecretKey>(secretKeyJson);
-        Console.WriteLine("Secret Key serialize test end");
+        secretKey = JsonSerializer.Deserialize<SecretKey>(secretKeyJson)!;
         var message = Encoding.Default.GetBytes("dsafsadsa");
-        Console.WriteLine("Encrypt test start");
         var cipher = Extension.Encrypt(_publicKey,new[]{"A", "B"}, message );
-        Console.WriteLine("Encrypt test end");
-        Console.WriteLine("Cipher serialize test start");
         var cipherJson = JsonSerializer.Serialize(cipher);
-        Console.WriteLine(cipherJson);
-        var cipherDeserialized = JsonSerializer.Deserialize<Cipher>(cipherJson);
-        Console.WriteLine("Decrypt test start");
-        var text = secretKeyDeserialized.Decrypt(cipherDeserialized);
-        Console.WriteLine("Decrypt test end");
+        cipher = JsonSerializer.Deserialize<Cipher>(cipherJson)!;
+        var text = Extension.Decrypt(secretKey, cipher);
         Assert.AreEqual(text,message);
     }
     

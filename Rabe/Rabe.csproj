@@ -4,13 +4,13 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>Rabe.Core</PackageId>
-        <Version>1.0.4</Version>
-        <Authors>ljj</Authors>
+        <Version>1.1.0-beta1</Version>
+        <Authors>abc66789</Authors>
         <PackageReleaseNotes>Fix Bug: make json quotes escaped and lead to unexpected serialization result</PackageReleaseNotes>
         <PackageTags>Attribute Based Encryption;Encryption;Crypto;ABE;CP-ABE;KP-ABE</PackageTags>
         <Description>
-            This library is rust attribute based encryption library rabe's c# binding, support CP-ABE and KP-ABE encryption and decryption.
-            And support cipher or key json serialization and deserialization.
+            This library is rust attribute based encryption library rabe's c# binding, support mutiple CP-ABE and KP-ABE algorithm.
+            Support cipher or key json serialization and deserialization.
         </Description>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <!--  在哪个平台上调试就填哪个   -->

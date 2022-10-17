@@ -96,8 +96,7 @@ public static class RabeNative
         ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
     public static extern IntPtr cp_ac17_generate_secret_key([NativeTypeName("const void *")] IntPtr master_key,
-        [NativeTypeName("const char *const *")]
-        string[] attr, [NativeTypeName("uintptr_t")] nuint attr_len);
+        [NativeTypeName("const char *const *")] string[] attr, [NativeTypeName("uintptr_t")] nuint attr_len);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_ac17_encrypt",
         ExactSpelling = true)]
@@ -142,8 +141,8 @@ public static class RabeNative
     [return: NativeTypeName("const void *")]
     public static extern IntPtr ac17_public_key_from_json([NativeTypeName("const char *")] string json);
 
-    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_ac17_secret_key_from_json",
-        ExactSpelling = true)]
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_ac17_secret_key_from_json", ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
     public static extern IntPtr cp_ac17_secret_key_from_json([NativeTypeName("const char *")] string json);
 
@@ -177,25 +176,20 @@ public static class RabeNative
         ExactSpelling = true)]
     [return: NativeTypeName("struct Aw11AuthGenResult")]
     public static extern Aw11AuthGenResult cp_aw11_generate_auth([NativeTypeName("const void *")] IntPtr global_key,
-        [NativeTypeName("const char *const *")]
-        string[] attrs, [NativeTypeName("uintptr_t")] nuint attr_len);
+        [NativeTypeName("const char *const *")] string[] attrs, [NativeTypeName("uintptr_t")] nuint attr_len);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_generate_secret_key",
         ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
-    public static extern IntPtr cp_aw11_generate_secret_key(
-        [NativeTypeName("const void *")] IntPtr global_key,
-        [NativeTypeName("const void *")] IntPtr master_key, 
-        [NativeTypeName("const char *")] string name,
-        [NativeTypeName("const char *const *")] string[] attrs, 
-        [NativeTypeName("uintptr_t")] nuint attr_len);
+    public static extern IntPtr cp_aw11_generate_secret_key([NativeTypeName("const void *")] IntPtr global_key,
+        [NativeTypeName("const void *")] IntPtr master_key, [NativeTypeName("const char *")] string name,
+        [NativeTypeName("const char *const *")] string[] attrs, [NativeTypeName("uintptr_t")] nuint attr_len);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_aw11_encrypt",
         ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
     public static extern IntPtr cp_aw11_encrypt([NativeTypeName("const void *")] IntPtr global_key,
-        [NativeTypeName("const void *const *")] IntPtr[] public_keys, 
-        [NativeTypeName("uintptr_t")] nuint public_keys_len,
+        [NativeTypeName("const void *const *")] IntPtr[] public_keys, [NativeTypeName("uintptr_t")] nuint public_keys_len,
         [NativeTypeName("const char *")] string policy, [NativeTypeName("const char *")] byte[] text,
         [NativeTypeName("uintptr_t")] nuint text_length);
 
@@ -281,43 +275,42 @@ public static class RabeNative
     public static extern BdabeSetupResult cp_bdabe_init();
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
-        EntryPoint = "rabe_cp_bdabe_generate_sec_auth_key", ExactSpelling = true)]
+        EntryPoint = "rabe_cp_bdabe_generate_secret_authority_key", ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
-    public static extern IntPtr cp_bdabe_generate_sec_auth_key([NativeTypeName("const void *")] IntPtr public_key,
+    public static extern IntPtr cp_bdabe_generate_secret_authority_key([NativeTypeName("const void *")] IntPtr public_key,
         [NativeTypeName("const void *")] IntPtr master_key, [NativeTypeName("const char *")] string name);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
-        EntryPoint = "rabe_cp_bdabe_generate_sec_attr_key", ExactSpelling = true)]
+        EntryPoint = "rabe_cp_bdabe_generate_secret_attribute_key", ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
-    public static extern IntPtr cp_bdabe_generate_sec_attr_key([NativeTypeName("const void *")] IntPtr pub_user_key,
-        [NativeTypeName("const void *")] IntPtr sec_auth_key, [NativeTypeName("const char *")] string attr);
+    public static extern IntPtr cp_bdabe_generate_secret_attribute_key(
+        [NativeTypeName("const void *")] IntPtr public_user_key,
+        [NativeTypeName("const void *")] IntPtr secret_authority_key, [NativeTypeName("const char *")] string attr);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_generate_user_key",
         ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
     public static extern IntPtr cp_bdabe_generate_user_key([NativeTypeName("const void *")] IntPtr public_key,
-        [NativeTypeName("const void *")] IntPtr sec_auth_key, [NativeTypeName("const char *")] string name);
+        [NativeTypeName("const void *")] IntPtr secret_authority_key, [NativeTypeName("const char *")] string name);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
-        EntryPoint = "rabe_cp_bdabe_generate_pub_attr_key", ExactSpelling = true)]
+        EntryPoint = "rabe_cp_bdabe_generate_public_attribute_key", ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
-    public static extern IntPtr cp_bdabe_generate_pub_attr_key([NativeTypeName("const void *")] IntPtr public_key,
-        [NativeTypeName("const void *")] IntPtr sec_auth_key, [NativeTypeName("const char *")] string name);
+    public static extern IntPtr cp_bdabe_generate_public_attribute_key([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const void *")] IntPtr secret_authority_key, [NativeTypeName("const char *")] string name);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
-        EntryPoint = "rabe_cp_bdabe_add_attr_to_user_key", ExactSpelling = true)]
-    public static extern int cp_bdabe_add_attr_to_user_key(
-        [NativeTypeName("const void *")] IntPtr sec_auth_key,
-        [NativeTypeName("const void *")] IntPtr user_key, 
+        EntryPoint = "rabe_cp_bdabe_add_attribute_to_user_key", ExactSpelling = true)]
+    public static extern int cp_bdabe_add_attribute_to_user_key(
+        [NativeTypeName("const void *")] IntPtr secret_authority_key, [NativeTypeName("const void *")] IntPtr user_key,
         [NativeTypeName("const char *")] string attr);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_encrypt",
         ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
     public static extern IntPtr cp_bdabe_encrypt([NativeTypeName("const void *")] IntPtr public_key,
-        [NativeTypeName("const void *const *")]
-        IntPtr[] pub_attr_keys,
-        [NativeTypeName("uintptr_t")] nuint pub_attr_keys_len, [NativeTypeName("const char *")] string policy,
+        [NativeTypeName("const void *const *")] IntPtr[] public_attribute_keys,
+        [NativeTypeName("uintptr_t")] nuint public_attribute_keys_len, [NativeTypeName("const char *")] string policy,
         [NativeTypeName("const char *")] byte[] text, [NativeTypeName("uintptr_t")] nuint text_length);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_bdabe_decrypt",
@@ -538,24 +531,35 @@ public static class RabeNative
     [return: NativeTypeName("struct Mke08SetupResult")]
     public static extern Mke08SetupResult cp_mke08_init();
 
-    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_generate_auth",
-        ExactSpelling = true)]
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_generate_secret_authority_key", ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
-    public static extern IntPtr cp_mke08_generate_auth([NativeTypeName("const char *")] string name);
+    public static extern IntPtr cp_mke08_generate_secret_authority_key([NativeTypeName("const char *")] string name);
 
-    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_generate_secret_key",
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_generate_user_key",
         ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
-    public static extern IntPtr cp_mke08_generate_secret_key([NativeTypeName("const void *")] IntPtr public_key,
+    public static extern IntPtr cp_mke08_generate_user_key([NativeTypeName("const void *")] IntPtr public_key,
         [NativeTypeName("const void *")] IntPtr master_key, [NativeTypeName("const char *")] string name);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_add_attribute_to_user_key", ExactSpelling = true)]
+    public static extern int cp_mke08_add_attribute_to_user_key(
+        [NativeTypeName("const void *")] IntPtr secret_authority_key, [NativeTypeName("const void *")] IntPtr user_key,
+        [NativeTypeName("const char *")] string attr);
+
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_cp_mke08_generate_public_attribute_key", ExactSpelling = true)]
+    [return: NativeTypeName("const void *")]
+    public static extern IntPtr cp_mke08_generate_public_attribute_key([NativeTypeName("const void *")] IntPtr public_key,
+        [NativeTypeName("const char *")] string attr, [NativeTypeName("const void *")] IntPtr secret_authority_key);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_encrypt",
         ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
     public static extern IntPtr cp_mke08_encrypt([NativeTypeName("const void *")] IntPtr public_key,
-        [NativeTypeName("const void *const *")]
-        IntPtr[] pub_attr_keys,
-        [NativeTypeName("uintptr_t")] nuint pub_attr_keys_len, [NativeTypeName("const char *")] string policy,
+        [NativeTypeName("const void *const *")] IntPtr[] public_attribute_keys,
+        [NativeTypeName("uintptr_t")] nuint public_attribute_keys_len, [NativeTypeName("const char *")] string policy,
         [NativeTypeName("const char *")] byte[] text, [NativeTypeName("uintptr_t")] nuint text_length);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_cp_mke08_decrypt",
@@ -700,11 +704,8 @@ public static class RabeNative
         ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
     public static extern IntPtr kp_ac17_encrypt([NativeTypeName("const void *")] IntPtr public_key,
-        [NativeTypeName("const char *const *")]
-        string[] attr, 
-        [NativeTypeName("uintptr_t")] nuint attr_len,
-        [NativeTypeName("const char *")] byte[] text, 
-        [NativeTypeName("uintptr_t")] nuint text_length);
+        [NativeTypeName("const char *const *")] string[] attr, [NativeTypeName("uintptr_t")] nuint attr_len,
+        [NativeTypeName("const char *")] byte[] text, [NativeTypeName("uintptr_t")] nuint text_length);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_ac17_decrypt",
         ExactSpelling = true)]
@@ -774,8 +775,8 @@ public static class RabeNative
     public static extern Yct14AbeSetupResult kp_yct14_init([NativeTypeName("const char *const *")] string[] attrs,
         [NativeTypeName("uintptr_t")] nuint attr_len);
 
-    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_generate_secret_key",
-        ExactSpelling = true)]
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl,
+        EntryPoint = "rabe_kp_yct14_generate_secret_key", ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
     public static extern IntPtr kp_yct14_generate_secret_key([NativeTypeName("const void *")] IntPtr public_key,
         [NativeTypeName("const void *")] IntPtr master_key, [NativeTypeName("const char *")] string policy);
@@ -784,8 +785,7 @@ public static class RabeNative
         ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
     public static extern IntPtr kp_yct14_encrypt([NativeTypeName("const void *")] IntPtr public_key,
-        [NativeTypeName("const char *const *")]
-        string[] attrs, [NativeTypeName("uintptr_t")] nuint attr_len,
+        [NativeTypeName("const char *const *")] string[] attrs, [NativeTypeName("uintptr_t")] nuint attr_len,
         [NativeTypeName("const char *")] byte[] text, [NativeTypeName("uintptr_t")] nuint text_length);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_yct14_decrypt",
@@ -865,8 +865,7 @@ public static class RabeNative
         ExactSpelling = true)]
     [return: NativeTypeName("const void *")]
     public static extern IntPtr kp_lsw_encrypt([NativeTypeName("const void *")] IntPtr public_key,
-        [NativeTypeName("const char *const *")]
-        string[] attrs, [NativeTypeName("uintptr_t")] nuint attr_len,
+        [NativeTypeName("const char *const *")] string[] attrs, [NativeTypeName("uintptr_t")] nuint attr_len,
         [NativeTypeName("const char *")] byte[] text, [NativeTypeName("uintptr_t")] nuint text_length);
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_kp_lsw_decrypt",
@@ -931,3 +930,4 @@ public static class RabeNative
         ExactSpelling = true)]
     public static extern void kp_lsw_free_ciphertext([NativeTypeName("const void *")] IntPtr ptr);
 }
+

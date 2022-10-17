@@ -19,13 +19,6 @@ public class PublicKey : NativeObject
     {
     }
     
-
-    public byte[] Decrypt(Cipher cipher)
-    {
-        var result = RabeNative.kp_yct14_decrypt(cipher.Handle, Handle);
-        return result.ToByteArrayAndFree();
-    }
-
     protected override void FreeHandle(IntPtr handle)
     {
         RabeNative.kp_yct14_free_public_key(handle);
@@ -39,13 +32,6 @@ public class MasterKey : NativeObject
     {
     }
     
-
-    public byte[] Decrypt(Cipher cipher)
-    {
-        var result = RabeNative.kp_yct14_decrypt(cipher.Handle, Handle);
-        return result.ToByteArrayAndFree();
-    }
-
     protected override void FreeHandle(IntPtr handle)
     {
         RabeNative.kp_yct14_free_master_key(handle);
@@ -60,13 +46,6 @@ public class SecretKey : NativeObject
     {
     }
     
-
-    public byte[] Decrypt(Cipher cipher)
-    {
-        var result = RabeNative.kp_yct14_decrypt(cipher.Handle, Handle);
-        return result.ToByteArrayAndFree();
-    }
-
     protected override void FreeHandle(IntPtr handle)
     {
         RabeNative.kp_yct14_free_secret_key(handle);
@@ -80,7 +59,6 @@ public class Cipher : NativeObject
     {
         
     }
-
 
     protected override void FreeHandle(IntPtr handle)
     {
@@ -104,5 +82,10 @@ public static class Extension
         if (secretKey == IntPtr.Zero)
             throw new Exception("KeyGen failed");
         return new SecretKey(secretKey);
+    }
+    public static byte[] Decrypt(this SecretKey secretKey, Cipher cipher)
+    {
+        var result = RabeNative.kp_yct14_decrypt(cipher.Handle, secretKey.Handle);
+        return result.ToByteArrayAndFree();
     }
 }

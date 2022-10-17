@@ -133,7 +133,7 @@ public static class Extension
 {
     public static SecretAuthorityKey AuthorityKeyGen(this PublicKey publicKey, MasterKey masterKey, string name)
     {
-        var secretAuthorityKey = RabeNative.cp_bdabe_generate_sec_auth_key(publicKey.Handle, masterKey.Handle, name);
+        var secretAuthorityKey = RabeNative.cp_bdabe_generate_secret_authority_key(publicKey.Handle, masterKey.Handle, name);
         if (secretAuthorityKey == IntPtr.Zero)
             throw new Exception("Authority key generation failed");
         return new SecretAuthorityKey(secretAuthorityKey);
@@ -152,7 +152,7 @@ public static class Extension
     
     public static PublicAttributeKey PublicAttributeKeyGen(this PublicKey publicKey,SecretAuthorityKey authorityKey, string name)
     {
-        var userKey = RabeNative.cp_bdabe_generate_pub_attr_key(
+        var userKey = RabeNative.cp_bdabe_generate_public_attribute_key(
             publicKey.Handle, 
             authorityKey.Handle, 
             name
@@ -164,7 +164,7 @@ public static class Extension
 
     public static void AddAttributeToUserKey(this UserKey userKey,SecretAuthorityKey authorityKey, string attr)
     {
-        var result = RabeNative.cp_bdabe_add_attr_to_user_key(
+        var result = RabeNative.cp_bdabe_add_attribute_to_user_key(
             authorityKey.Handle, 
             userKey.Handle,
             attr

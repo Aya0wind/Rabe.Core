@@ -27,7 +27,7 @@ public class LSWTest
     public void KPABETest()
     {
         Console.WriteLine("KPABE test start");
-        SecretKey secretKey = Extension.KeyGen(_masterKey,"\"A\" and \"B\"");
+        SecretKey secretKey = Extension.KeyGen(_publicKey,_masterKey,"\"A\" and \"B\"");
         Console.WriteLine("Secret Key serialize test start");
         var secretKeyJson = JsonSerializer.Serialize(secretKey);
         Console.WriteLine(secretKeyJson);

@@ -18,13 +18,6 @@ public class SecretKey : NativeObject
     public SecretKey(IntPtr handle):base(handle)
     {
     }
-    
-
-    public byte[] Decrypt(Cipher cipher)
-    {
-        var result = RabeNative.kp_ac17_decrypt(cipher.Handle, Handle);
-        return result.ToByteArrayAndFree();
-    }
 
     protected override void FreeHandle(IntPtr handle)
     {
@@ -65,5 +58,9 @@ public static class Extension
         return new SecretKey(secretKey);
     }
     
-    
+    public static byte[] Decrypt(this SecretKey secretKey, Cipher cipher)
+    {
+        var result = RabeNative.kp_ac17_decrypt(cipher.Handle, secretKey.Handle);
+        return result.ToByteArrayAndFree();
+    }
 }
