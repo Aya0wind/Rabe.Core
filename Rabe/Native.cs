@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Rabe;
 
-public struct CBoxedBuffer
+internal struct CBoxedBuffer
 {
     [NativeTypeName("const unsigned char *")]
     public IntPtr buffer;
@@ -11,49 +11,49 @@ public struct CBoxedBuffer
     [NativeTypeName("uintptr_t")] public nuint len;
 }
 
-public struct Ac17SetupResult
+internal struct Ac17SetupResult
 {
     [NativeTypeName("const void *")] public IntPtr master_key;
 
     [NativeTypeName("const void *")] public IntPtr public_key;
 }
 
-public struct Aw11AuthGenResult
+internal struct Aw11AuthGenResult
 {
     [NativeTypeName("const void *")] public IntPtr master_key;
 
     [NativeTypeName("const void *")] public IntPtr public_key;
 }
 
-public struct BdabeSetupResult
+internal struct BdabeSetupResult
 {
     [NativeTypeName("const void *")] public IntPtr master_key;
 
     [NativeTypeName("const void *")] public IntPtr public_key;
 }
 
-public struct BswSetupResult
+internal struct BswSetupResult
 {
     [NativeTypeName("const void *")] public IntPtr master_key;
 
     [NativeTypeName("const void *")] public IntPtr public_key;
 }
 
-public struct Mke08SetupResult
+internal struct Mke08SetupResult
 {
     [NativeTypeName("const void *")] public IntPtr master_key;
 
     [NativeTypeName("const void *")] public IntPtr public_key;
 }
 
-public struct Yct14AbeSetupResult
+internal struct Yct14AbeSetupResult
 {
     [NativeTypeName("const void *")] public IntPtr master_key;
 
     [NativeTypeName("const void *")] public IntPtr public_key;
 }
 
-public struct LswSetupResult
+internal struct LswSetupResult
 {
     [NativeTypeName("const void *")] public IntPtr master_key;
 
@@ -77,7 +77,7 @@ internal sealed class NativeTypeNameAttribute : Attribute
     public string Name { get; }
 }
 
-public static class RabeNative
+internal static class RabeNative
 {
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_free_json",
         ExactSpelling = true)]

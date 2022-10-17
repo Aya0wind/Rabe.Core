@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Rabe;
 
-public static class Common
+internal static class Common
 {
     public static string? ReadAsString(this IntPtr ptr)
     {
