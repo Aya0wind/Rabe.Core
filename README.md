@@ -55,7 +55,7 @@ If you want to support other platforms and need to build from source:
 
 2. Build rust native library 
    + ```cd Rabe.Core/Rabe-ffi```
-   + ```cargo build --release```
+   + ```cargo build --release``` ***Need nightly rust toolchain to build!!!!***
 3. Copy native runtime library to Rabe.Core
    + ```cp target/release/librabe_core.so ../Rabe.Core/Rabe/libs/runtimes/linux-x64/native/rabe_core.so``` (**linux**)
    + ```cp target/release/librabe_core.dylib ../Rabe.Core/Rabe/libs/runtimes/osx-x64/native/rabe_core.dylib``` (**osx**)
