@@ -13,7 +13,7 @@ internal static class Common
     public static byte[] ToByteArrayAndFree(this CBoxedBuffer buffer)
     {
         if (buffer.buffer == IntPtr.Zero)
-            throw new Exception("Decryption failed");
+            throw Common.GetLastWrappedException();
         var managedBuffer = new byte[buffer.len];
         Marshal.Copy(buffer.buffer, managedBuffer, 0, (int)buffer.len);
         RabeNative.free_boxed_buffer(buffer);
@@ -31,5 +31,15 @@ internal static class Common
     {
         return Encoding.Default.GetBytes(str);
     }
+
+    public static Exception GetLastWrappedException()
+    {
+       string message =  RabeNative.get_thread_last_error();
+       return new RabeException(message);
+    }
     
+}
+
+public class RabeException:Exception{
+    public RabeException(string message):base(message){ }
 }

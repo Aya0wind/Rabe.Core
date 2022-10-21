@@ -59,7 +59,7 @@ public class SecretKey : NativeObject
     {
         var result = RabeNative.cp_ac17_decrypt(cipher.Handle, Handle);
         if (result.buffer == IntPtr.Zero)
-            throw new Exception("Decryption failed");
+            throw Common.GetLastWrappedException();
         var buffer = new byte[result.len];
         Marshal.Copy(result.buffer, buffer, 0, buffer.Length);
         RabeNative.free_boxed_buffer(result);
@@ -78,7 +78,7 @@ public static class Extension
     {
         var cipher = RabeNative.cp_ac17_encrypt(publicKey.Handle, policy, text, (UIntPtr)text.Length);
         if (cipher == IntPtr.Zero)
-            throw new Exception("Encryption failed");
+            throw Common.GetLastWrappedException();
         return new Cipher(cipher);
     }
 
@@ -91,7 +91,7 @@ public static class Extension
             (UIntPtr)attributeArray.Length
             );
         if (secretKey == IntPtr.Zero)
-            throw new Exception("KeyGen failed");
+            throw Common.GetLastWrappedException();
         return new SecretKey(secretKey);
     }
 }

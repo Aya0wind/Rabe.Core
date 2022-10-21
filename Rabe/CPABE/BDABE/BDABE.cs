@@ -135,7 +135,7 @@ public static class Extension
     {
         var secretAuthorityKey = RabeNative.cp_bdabe_generate_secret_authority_key(publicKey.Handle, masterKey.Handle, name);
         if (secretAuthorityKey == IntPtr.Zero)
-            throw new Exception("Authority key generation failed");
+            throw Common.GetLastWrappedException();
         return new SecretAuthorityKey(secretAuthorityKey);
     }
     
@@ -146,7 +146,7 @@ public static class Extension
             authorityKey.Handle, 
             name);
         if (userKey == IntPtr.Zero)
-            throw new Exception("KeyGen failed");
+            throw Common.GetLastWrappedException();
         return new UserKey(userKey);
     }
     
@@ -158,7 +158,7 @@ public static class Extension
             name
         );
         if (userKey == IntPtr.Zero)
-            throw new Exception("KeyGen failed");
+            throw Common.GetLastWrappedException();
         return new PublicAttributeKey(userKey);
     }
 
@@ -170,7 +170,7 @@ public static class Extension
             attr
         );
         if (result != 0)
-            throw new Exception("KeyGen failed");
+            throw Common.GetLastWrappedException();
     }
     
     public static Cipher Encrypt(
@@ -188,7 +188,7 @@ public static class Extension
             text,
             (UIntPtr)text.Length);
         if (cipher == IntPtr.Zero)
-            throw new Exception("Encryption failed");
+            throw Common.GetLastWrappedException();
         return new Cipher(cipher);
     }
     

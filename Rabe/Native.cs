@@ -82,6 +82,11 @@ internal static class RabeNative
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_free_json",
         ExactSpelling = true)]
     public static extern void free_json([NativeTypeName("char *")] IntPtr json);
+    
+    [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_get_thread_last_error",
+        ExactSpelling = true)]
+    public static extern string get_thread_last_error();
+    
 
     [DllImport("rabe_ffi", CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_free_boxed_buffer",
         ExactSpelling = true)]

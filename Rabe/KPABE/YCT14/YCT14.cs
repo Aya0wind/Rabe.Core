@@ -72,7 +72,7 @@ public static class Extension
     {
         var cipher = RabeNative.kp_yct14_encrypt(publicKey.Handle, attrs, (nuint)attrs.Length,text, (nuint)text.Length);
         if (cipher == IntPtr.Zero)
-            throw new Exception("Encryption failed");
+            throw Common.GetLastWrappedException();
         return new Cipher(cipher);
     }
 
@@ -80,7 +80,7 @@ public static class Extension
     {
         var secretKey = RabeNative.kp_yct14_generate_secret_key(publicKey.Handle, masterKey.Handle,policy);
         if (secretKey == IntPtr.Zero)
-            throw new Exception("KeyGen failed");
+            throw Common.GetLastWrappedException();
         return new SecretKey(secretKey);
     }
     public static byte[] Decrypt(this SecretKey secretKey, Cipher cipher)

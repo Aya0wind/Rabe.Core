@@ -88,7 +88,7 @@ public class SecretAttributeKey : NativeObject
     {
         var result = RabeNative.cp_ac17_decrypt(cipher.Handle, Handle);
         if (result.buffer == IntPtr.Zero)
-            throw new Exception("Decryption failed");
+            throw Common.GetLastWrappedException();
         return result.ToByteArrayAndFree();
     }
 
@@ -151,7 +151,7 @@ public static class Extension
             (nuint)text.Length
             );
         if (cipher == IntPtr.Zero)
-            throw new Exception("Encryption failed");
+            throw Common.GetLastWrappedException();
         return new Cipher(cipher);
     }
     
@@ -169,7 +169,7 @@ public static class Extension
             name
             );
         if (userKey == IntPtr.Zero)
-            throw new Exception("UserKeyGen failed");
+            throw Common.GetLastWrappedException();
         return new UserKey(userKey);
     }
     
@@ -177,7 +177,7 @@ public static class Extension
     {
         var secretAuthorityKey = RabeNative.cp_mke08_generate_secret_authority_key(name);
         if (secretAuthorityKey == IntPtr.Zero)
-            throw new Exception("SecretAuthorityKeyGen failed");
+            throw Common.GetLastWrappedException();
         return new SecretAuthorityKey(secretAuthorityKey);
     }
     
@@ -189,7 +189,7 @@ public static class Extension
             secretAuthorityKey.Handle
             );
         if (publicAttributeKey == IntPtr.Zero)
-            throw new Exception("PublicAttributeKeyGen failed");
+            throw Common.GetLastWrappedException();
         return new PublicAttributeKey(publicAttributeKey);
     }
     
@@ -201,6 +201,6 @@ public static class Extension
             attribute
             );
         if (result != 0)
-            throw new Exception("AddAttribute failed");
+            throw Common.GetLastWrappedException();
     }
 }

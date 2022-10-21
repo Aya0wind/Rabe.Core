@@ -69,7 +69,7 @@ public static class Extension
     {
         var cipher = RabeNative.cp_bsw_encrypt(publicKey.Handle, policy, text, (UIntPtr)text.Length);
         if (cipher == IntPtr.Zero)
-            throw new Exception("Encryption failed");
+            throw Common.GetLastWrappedException();
         return new Cipher(cipher);
     }
 
@@ -88,7 +88,7 @@ public static class Extension
             (nuint)attributes.Length
             );
         if (secretKey == IntPtr.Zero)
-            throw new Exception("KeyGen failed");
+            throw Common.GetLastWrappedException();
         return new SecretKey(secretKey);
     }
     

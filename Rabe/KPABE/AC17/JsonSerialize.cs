@@ -12,7 +12,7 @@ internal class SecretKeyJsonConverter : JsonConverter<SecretKey>
             var rawText = document.RootElement.GetRawText();
             var handle = RabeNative.kp_ac17_secret_key_from_json(rawText);
             if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize CpSecretKey");
+                throw Common.GetLastWrappedException();
             return new SecretKey(handle);
         }
     }
@@ -22,7 +22,7 @@ internal class SecretKeyJsonConverter : JsonConverter<SecretKey>
     {   //convert a SecretKey to a json object
         var json = RabeNative.kp_ac17_secret_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert CpSecretKey to json");
+            throw Common.GetLastWrappedException();
         try
         {
             writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
@@ -43,7 +43,7 @@ internal class CipherJsonConverter : JsonConverter<Cipher>
             var rawText = document.RootElement.GetRawText();
             var handle = RabeNative.kp_ac17_ciphertext_from_json(rawText);
             if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize CpCipher");
+                throw Common.GetLastWrappedException();
             return new Cipher(handle);
         }
     }
@@ -53,7 +53,7 @@ internal class CipherJsonConverter : JsonConverter<Cipher>
         //convert a Cipher to a json object
         var json = RabeNative.kp_ac17_ciphertext_to_json(value.Handle);
         if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert Cipher to json");
+            throw Common.GetLastWrappedException();
         try
         {
             writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);

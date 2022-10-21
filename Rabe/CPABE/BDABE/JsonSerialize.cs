@@ -13,7 +13,7 @@ internal class PublicKeyJsonConverter : JsonConverter<PublicKey>
             var rawText = document.RootElement.GetRawText();
             var handle = RabeNative.cp_bdabe_public_key_from_json(rawText);
             if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize publicKey");
+                throw Common.GetLastWrappedException();
             return new PublicKey(handle);
         }
     }
@@ -23,7 +23,7 @@ internal class PublicKeyJsonConverter : JsonConverter<PublicKey>
         //convert a PublicKey to a json object
         var json = RabeNative.cp_bdabe_public_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert publicKey to json");
+            throw Common.GetLastWrappedException();
         try
         {
             writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
@@ -44,7 +44,7 @@ internal class PublicAttributeKeyJsonConverter : JsonConverter<PublicAttributeKe
             var rawText = document.RootElement.GetRawText();
             var handle = RabeNative.cp_bdabe_public_attribute_key_from_json(rawText);
             if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize publicKey");
+                throw Common.GetLastWrappedException();
             return new PublicAttributeKey(handle);
         }
     }
@@ -54,7 +54,7 @@ internal class PublicAttributeKeyJsonConverter : JsonConverter<PublicAttributeKe
         //convert a PublicKey to a json object
         var json = RabeNative.cp_bdabe_public_attribute_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert publicKey to json");
+            throw Common.GetLastWrappedException();
         try
         {
             writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
@@ -75,7 +75,7 @@ internal class PublicUserKeyJsonConverter : JsonConverter<PublicUserKey>
             var rawText = document.RootElement.GetRawText();
             var handle = RabeNative.cp_bdabe_public_user_key_from_json(rawText);
             if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize publicKey");
+                throw Common.GetLastWrappedException();
             return new PublicUserKey(handle);
         }
     }
@@ -85,7 +85,7 @@ internal class PublicUserKeyJsonConverter : JsonConverter<PublicUserKey>
         //convert a PublicKey to a json object
         var json = RabeNative.cp_bdabe_public_user_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert publicKey to json");
+            throw Common.GetLastWrappedException();
         try
         {
             writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
@@ -106,7 +106,7 @@ internal class MasterKeyJsonConverter : JsonConverter<MasterKey>
             var rawText = document.RootElement.GetRawText();
             var handle = RabeNative.cp_bdabe_master_key_from_json(rawText);
             if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize masterKey");
+                throw Common.GetLastWrappedException();
             return new MasterKey(handle);
         }
     }
@@ -116,7 +116,7 @@ internal class MasterKeyJsonConverter : JsonConverter<MasterKey>
         //convert a MasterKey to a json object
         var json = RabeNative.cp_bdabe_master_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert masterKey to json");
+            throw Common.GetLastWrappedException();
         try
         {
             writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
@@ -137,7 +137,7 @@ internal class SecretAttributeKeyJsonConverter : JsonConverter<SecretAttributeKe
             var rawText = document.RootElement.GetRawText();
             var handle = RabeNative.cp_bdabe_secret_attribute_key_from_json(rawText);
             if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize CpSecretKey");
+                throw Common.GetLastWrappedException();
             return new SecretAttributeKey(handle);
         }
     }
@@ -147,7 +147,7 @@ internal class SecretAttributeKeyJsonConverter : JsonConverter<SecretAttributeKe
     {   //convert a SecretKey to a json object
         var json = RabeNative.cp_bdabe_secret_attribute_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert CpSecretKey to json");
+            throw Common.GetLastWrappedException();
         try
         {
             writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
@@ -168,7 +168,7 @@ internal class SecretAuthorityKeyJsonConverter : JsonConverter<SecretAuthorityKe
             var rawText = document.RootElement.GetRawText();
             var handle = RabeNative.cp_bdabe_secret_authority_key_from_json(rawText);
             if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize CpSecretKey");
+                throw Common.GetLastWrappedException();
             return new SecretAuthorityKey(handle);
         }
     }
@@ -178,7 +178,7 @@ internal class SecretAuthorityKeyJsonConverter : JsonConverter<SecretAuthorityKe
     {   //convert a SecretKey to a json object
         var json = RabeNative.cp_bdabe_secret_authority_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert CpSecretKey to json");
+            throw Common.GetLastWrappedException();
         try
         {
             writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
@@ -200,7 +200,7 @@ internal class SecretUserKeyJsonConverter : JsonConverter<SecretUserKey>
             var rawText = document.RootElement.GetRawText();
             var handle = RabeNative.cp_bdabe_secret_user_key_from_json(rawText);
             if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize CpSecretKey");
+                throw Common.GetLastWrappedException();
             return new SecretUserKey(handle);
         }
     }
@@ -210,7 +210,7 @@ internal class SecretUserKeyJsonConverter : JsonConverter<SecretUserKey>
     {   //convert a SecretKey to a json object
         var json = RabeNative.cp_bdabe_secret_user_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert CpSecretKey to json");
+            throw Common.GetLastWrappedException();
         try
         {
             writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
@@ -232,7 +232,7 @@ internal class CipherJsonConverter : JsonConverter<Cipher>
             var rawText = document.RootElement.GetRawText();
             var handle = RabeNative.cp_bdabe_ciphertext_from_json(rawText);
             if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize CpCipher");
+                throw Common.GetLastWrappedException();
             return new Cipher(handle);
         }
     }
@@ -242,7 +242,7 @@ internal class CipherJsonConverter : JsonConverter<Cipher>
         //convert a Cipher to a json object
         var json = RabeNative.cp_bdabe_ciphertext_to_json(value.Handle);
         if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert Cipher to json");
+            throw Common.GetLastWrappedException();
         try
         {
             writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);
@@ -263,7 +263,7 @@ internal class UserKeyJsonConverter : JsonConverter<Cipher>
             var rawText = document.RootElement.GetRawText();
             var handle = RabeNative.cp_bdabe_user_key_from_json(rawText);
             if (handle == IntPtr.Zero)
-                throw new Exception("Failed to deserialize CpCipher");
+                throw Common.GetLastWrappedException();
             return new Cipher(handle);
         }
     }
@@ -273,7 +273,7 @@ internal class UserKeyJsonConverter : JsonConverter<Cipher>
         //convert a Cipher to a json object
         var json = RabeNative.cp_bdabe_user_key_to_json(value.Handle);
         if (json == IntPtr.Zero)
-            throw new Exception("Failed to convert Cipher to json");
+            throw Common.GetLastWrappedException();
         try
         {
             writer.WriteRawValue(Marshal.PtrToStringAnsi(json)!);

@@ -4,9 +4,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>Rabe.Core</PackageId>
-        <Version>1.1.0-beta1</Version>
+        <Version>1.1.0-beta2</Version>
         <Authors>abc66789</Authors>
-        <PackageReleaseNotes>Fix Bug: make json quotes escaped and lead to unexpected serialization result</PackageReleaseNotes>
+        <PackageReleaseNotes>Wrap c error message to c# exception</PackageReleaseNotes>
         <PackageTags>Attribute Based Encryption;Encryption;Crypto;ABE;CP-ABE;KP-ABE</PackageTags>
         <Description>
             This library is rust attribute based encryption library rabe's c# binding, support mutiple CP-ABE and KP-ABE algorithm.
@@ -15,19 +15,19 @@
         <PackageProjectUrl>https://github.com/Aya0wind/Rabe.Core</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Aya0wind/Rabe.Core</RepositoryUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <!--  在哪个平台上调试就填哪个   -->
+        <!--  debug only, set the arch of debug environment   -->
         <DebugTargetOS>osx-arm64</DebugTargetOS>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
-        <!--  调试需要，自动复制库文件到运行目录下      -->
+        <!--  debug only，copy native library to output path      -->
         <None Include="libs\runtimes\$(DebugTargetOS)\native\*.*">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Link>%(FileName)%(Extension)</Link>
             <Visible>false</Visible>
         </None>
     </ItemGroup>
-    <!--  发布nuget包需要，自动打包对应平台的库文件到对应的平台目录下实现跨平台  -->
+    <!--  publish only，copy native libraries to runtime folder  -->
     <Target Name="IncludeAllDependencies" BeforeTargets="_GetPackageFiles">
         <ItemGroup>
             <None Include="libs\runtimes\**\*.*" Pack="True" PackagePath="runtimes" />

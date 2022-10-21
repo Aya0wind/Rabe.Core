@@ -62,7 +62,7 @@ public class SecretKey : NativeObject
     {
         var result = RabeNative.cp_ac17_decrypt(cipher.Handle, Handle);
         if (result.buffer == IntPtr.Zero)
-            throw new Exception("Decryption failed");
+            throw Common.GetLastWrappedException();
         return result.ToByteArrayAndFree();
     }
 
@@ -83,7 +83,7 @@ public class GlobalKey : NativeObject
     {
         var result = RabeNative.cp_ac17_decrypt(cipher.Handle, Handle);
         if (result.buffer == IntPtr.Zero)
-            throw new Exception("Decryption failed");
+            throw Common.GetLastWrappedException();
         return result.ToByteArrayAndFree();
     }
 
@@ -100,7 +100,7 @@ public static class Extension
     {
         var cipher = RabeNative.cp_ac17_encrypt(publicKey.Handle, policy, text, (UIntPtr)text.Length);
         if (cipher == IntPtr.Zero)
-            throw new Exception("Encryption failed");
+            throw Common.GetLastWrappedException();
         return new Cipher(cipher);
     }
 
@@ -113,7 +113,7 @@ public static class Extension
             (UIntPtr)attributes.Length
         );
         if (authGenResult.master_key == IntPtr.Zero||authGenResult.public_key == IntPtr.Zero)
-            throw new Exception("AuthorityGen failed");
+            throw Common.GetLastWrappedException();
         return ValueTuple.Create(new MasterKey(authGenResult.master_key),new PublicKey(authGenResult.public_key));
     }
     
@@ -129,7 +129,7 @@ public static class Extension
             (nuint)text.Length
             );
         if (cipher == IntPtr.Zero)
-            throw new Exception("Encryption failed");
+            throw Common.GetLastWrappedException();
         return new Cipher(cipher);
     }
     
@@ -137,7 +137,7 @@ public static class Extension
     {
         var result = RabeNative.cp_aw11_decrypt(globalKey.Handle,secretKey.Handle, cipher.Handle);
         if (result.buffer == IntPtr.Zero)
-            throw new Exception("Decryption failed");
+            throw Common.GetLastWrappedException();
         return result.ToByteArrayAndFree();
     }
     
@@ -152,7 +152,7 @@ public static class Extension
             (nuint)attributeArray.Length
             );
         if (secretKey == IntPtr.Zero)
-            throw new Exception("secretKeyGen failed");
+            throw Common.GetLastWrappedException();
         return new SecretKey(secretKey);
     }
 }
