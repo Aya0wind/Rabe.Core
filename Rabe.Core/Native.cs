@@ -80,7 +80,7 @@ internal sealed class NativeTypeNameAttribute : Attribute
 internal static class RabeNative
 {
 #if OS_WINDOWS
-    const string DllName = "rabe-ffi";
+    const string DllName = "rabe_ffi";
 #elif OS_LINUX
     const string DllName = "librabe_ffi";
 #elif OS_MACOS
