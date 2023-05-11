@@ -92,7 +92,7 @@ internal static class RabeNative
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_get_thread_last_error",
         ExactSpelling = true)]
-    public static extern string get_thread_last_error();
+    public static extern IntPtr get_thread_last_error();
 
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "rabe_free_boxed_buffer",

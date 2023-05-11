@@ -34,7 +34,9 @@ internal static class Common
 
     public static RabeException GetLastWrappedException()
     {
-        string message = RabeNative.get_thread_last_error();
+        IntPtr messagePtr = RabeNative.get_thread_last_error();
+        string message = Marshal.PtrToStringAnsi(messagePtr)!;
+        RabeNative.free_json(messagePtr);
         return new RabeException(message);
     }
 
