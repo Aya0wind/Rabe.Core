@@ -1,0 +1,38 @@
+name: dotnet
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        dotnet-version: ["6.0.x"]
+    steps:
+      - uses: actions/checkout@main
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "6.0.x"
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build -c Release
+      - name: Test with the dotnet CLI
+        run: dotnet test
+      - uses: actions/upload-artifact@v3
+        with:
+          name: rabe-ffi-nupkg
+          path: ./Rabe.Core/bin/Release/*.nupkg
