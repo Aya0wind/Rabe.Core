@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPublishable>false</IsPublishable>
         <IsPackable>false</IsPackable>
@@ -13,7 +13,7 @@
         <PackageReference Include="NUnit" Version="3.13.2" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
         <PackageReference Include="coverlet.collector" Version="3.1.0" />
-<!--        <PackageReference Include="Rabe.Core" Version="1.1.0-beta1" />-->
+        <!--        <PackageReference Include="Rabe.Core" Version="1.1.0-beta1" />-->
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Rabe.Core\Rabe.Core.csproj" />

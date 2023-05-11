@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Rabe.Core</PackageId>
@@ -34,9 +34,18 @@
       <Visible>false</Visible>
     </None>
   </ItemGroup>
-  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+  <ItemGroup Condition=" $([MSBuild]::IsOsPlatform('OSX'))">
     <!--  debug only，copy native library to output path      -->
-    <None Include="libs\runtimes\osx-arm64\native\*.*">
+    <None
+      Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'"
+      Include="libs\runtimes\osx-x64\native\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>%(FileName)%(Extension)</Link>
+      <Visible>false</Visible>
+    </None>
+    <None
+      Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'"
+      Include="libs\runtimes\osx-arm64\native\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>%(FileName)%(Extension)</Link>
       <Visible>false</Visible>
