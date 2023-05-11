@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.Text.Json;
 using NUnit.Framework;
-using Rabe.KPABE.YCT14;
+using Rabe.Core.KPABE.YCT14;
 
 namespace Test.KPABE;
 public class YCT14Test
@@ -12,7 +12,7 @@ public class YCT14Test
     [SetUp]
     public void Setup()
     {
-        var (masterKey,publicKey) = Context.Init(new []{"A","B"});
+        var (masterKey, publicKey) = Context.Init(new[] { "A", "B" });
         Console.WriteLine("Master and Public Key serialize test start");
         var masterKeyJson = JsonSerializer.Serialize(masterKey);
         var publicKeyJson = JsonSerializer.Serialize(publicKey);
@@ -22,12 +22,12 @@ public class YCT14Test
         _publicKey = JsonSerializer.Deserialize<PublicKey>(publicKeyJson)!;
         Console.WriteLine("Master Key serialize test end");
     }
-    
+
     [Test]
     public void KPABETest()
     {
         Console.WriteLine("KPABE test start");
-        SecretKey secretKey = Extension.KeyGen(_masterKey,_publicKey,"\"A\" and \"B\"");
+        SecretKey secretKey = Extension.KeyGen(_masterKey, _publicKey, "\"A\" and \"B\"");
         Console.WriteLine("Secret Key serialize test start");
         var secretKeyJson = JsonSerializer.Serialize(secretKey);
         Console.WriteLine(secretKeyJson);
@@ -35,7 +35,7 @@ public class YCT14Test
         Console.WriteLine("Secret Key serialize test end");
         var message = Encoding.Default.GetBytes("dsafsadsa");
         Console.WriteLine("Encrypt test start");
-        var cipher = Extension.Encrypt(_publicKey,new[]{"A", "B"}, message );
+        var cipher = Extension.Encrypt(_publicKey, new[] { "A", "B" }, message);
         Console.WriteLine("Encrypt test end");
         Console.WriteLine("Cipher serialize test start");
         var cipherJson = JsonSerializer.Serialize(cipher);
@@ -44,7 +44,7 @@ public class YCT14Test
         Console.WriteLine("Decrypt test start");
         var text = secretKeyDeserialized.Decrypt(cipherDeserialized);
         Console.WriteLine("Decrypt test end");
-        Assert.AreEqual(text,message);
+        Assert.AreEqual(text, message);
     }
-    
+
 }

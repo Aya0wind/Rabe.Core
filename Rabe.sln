@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabe", "Rabe\Rabe.csproj", "{25314A1E-E932-4542-A3E7-99E4185F6EE4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabe.Core", "Rabe.Core\Rabe.Core.csproj", "{25314A1E-E932-4542-A3E7-99E4185F6EE4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{C6998ADC-D189-4BE9-91E8-08C2FBEDC0B5}"
 EndProject

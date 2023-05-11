@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>Rabe.Core</PackageId>
+        <Version>1.1.0</Version>
+        <Authors>abc66789</Authors>
+        <PackageReleaseNotes>Wrap c error message to c# exception</PackageReleaseNotes>
+        <PackageTags>Attribute Based Encryption;Encryption;Crypto;ABE;CP-ABE;KP-ABE</PackageTags>
+        <Description>
+            This library is rust attribute based encryption library rabe's c# binding, support mutiple CP-ABE and KP-ABE algorithm.
+            Support cipher or key json serialization and deserialization.
+        </Description>
+        <PackageProjectUrl>https://github.com/Aya0wind/Rabe.Core</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Aya0wind/Rabe.Core</RepositoryUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <!--  debug only, set the arch of debug environment   -->
+        <DebugTargetOS>linux-x64</DebugTargetOS>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <ItemGroup>
+        <!--  debug only，copy native library to output path      -->
+        <None Include="libs\runtimes\$(DebugTargetOS)\native\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>%(FileName)%(Extension)</Link>
+            <Visible>false</Visible>
+        </None>
+    </ItemGroup>
+    <!--  publish only，copy native libraries to runtime folder  -->
+    <Target Name="IncludeAllDependencies" BeforeTargets="_GetPackageFiles">
+        <ItemGroup>
+            <None Include="libs\runtimes\**\*.*" Pack="True" PackagePath="runtimes" />
+        </ItemGroup>
+    </Target>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+      <DefineConstants>OS_WINDOWS</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+      <DefineConstants>OS_LINUX</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('FreeBSD'))">
+      <DefineConstants>OS_FREEBSD</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+      <DefineConstants>OS_MAC</DefineConstants>
+    </PropertyGroup>
+</Project>

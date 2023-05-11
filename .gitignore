@@ -1,5 +1,5 @@
-Rabe/bin/
-Rabe/obj/
+Rabe.Core/bin/
+Rabe.Core/obj/
 Test/bin/
 Test/obj/
 /packages/
@@ -7,3 +7,4 @@ publish/
 .idea/
 riderModule.iml
 /_ReSharper.Caches/
+.vscode/
