@@ -4,7 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Rabe.Core</PackageId>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Authors>abc66789</Authors>
     <PackageReleaseNotes>full surpport for all algorithms in rabe library</PackageReleaseNotes>
     <PackageTags>Attribute Based Encryption;Encryption;Crypto;ABE;CP-ABE;KP-ABE</PackageTags>
