@@ -53,14 +53,15 @@ If you want to support other platforms and need to build from source:
 1. clone project with native library submodule
    + ```git clone https://github.com/Aya0wind/Rabe.Core.git --recursive```
 
-2. Build rust native library 
+2. Build rust native library  
    + ```cd Rabe.Core/Rabe-ffi```
-   + ```cargo build --release``` ***Need nightly rust toolchain to build!!!!***
+   + ```rustup default nightly``` ***Need nightly rust toolchain to build!!!!***
+   + ```cargo build --release```  
 3. Copy native runtime library to Rabe.Core
-   + ```cp target/release/librabe_core.so ../Rabe.Core/Rabe/libs/runtimes/linux-x64/native/rabe_core.so``` (**linux**)
-   + ```cp target/release/librabe_core.dylib ../Rabe.Core/Rabe/libs/runtimes/osx-x64/native/rabe_core.dylib``` (**osx**)
-   + ```xcopy target/release/rabe_core.dll ../Rabe.Core/Rabe/libs/runtimes/win-x64/native/rabe_core.dll``` (**windows**)
-   + ...other platforms
+   + ```cp target/release/librabe_core.so ../Rabe.Core/Rabe/libs/runtimes/linux-x64/native/librabe_ffi.so``` (**linux**)
+   + ```cp target/release/librabe_core.dylib ../Rabe.Core/Rabe/libs/runtimes/osx-x64/native/librabe_ffi.dylib``` (**osx**)
+   + ```xcopy target/release/rabe_core.dll ../Rabe.Core/Rabe/libs/runtimes/win-x64/native/rabe_ffi.dll``` (**windows**)
+   + ...do the same operation on other platforms.
 4. Build project
    + Install [.NET 6.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
    + ```dotnet build -c Release```
