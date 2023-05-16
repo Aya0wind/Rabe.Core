@@ -1,7 +1,7 @@
 # Rabe.Core
 Rust Attribute-Based Encryption library [rabe](https://github.com/Fraunhofer-AISEC/rabe)'s C# binding , support multiple CP-ABE and KP-ABE encrypt and decrypt algorithms.  
 Provide cipher and key json serialization and deserialization with System.Text.Json.
-Only support windows-x64, linux-x64 and osx-arm64 now.
+Support windows-x64, linux-x64, osx-arm64 and osx-x64.
 # Support Schemes
 ## CP-ABE
 ### BDABE CP-ABE
